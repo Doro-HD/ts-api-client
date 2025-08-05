@@ -18,9 +18,13 @@ interface IAPIOptions {
 	body?: TJsonObj;
 }
 
-type TNoBodyAPIOptions = Omit<IAPIOptions, "method" | "body">;
+type TAPIPubOptions = Omit<IAPIOptions, "method" | "body">;
 
-type IBodyAPIOptions = Omit<IAPIOptions, "method">;
+type TNoBodyAPIOptions = TAPIPubOptions;
+
+interface IBodyAPIOptions extends TAPIPubOptions {
+	body: TJsonObj;
+}
 
 type TGetOptions = TNoBodyAPIOptions;
 
