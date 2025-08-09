@@ -89,6 +89,7 @@ Deno.test("Get", async (t) => {
 
     const getResult = await apiClient.get<typeof apiJson>();
 
+    assertEquals(getResult.code, 200);
     assertEquals(getResult.name, "ok");
     // @ts-ignore if the previous test is a success then there will be no error
     assertEquals(getResult.data, apiJson);
@@ -112,6 +113,7 @@ Deno.test("Get", async (t) => {
 
       const getResult = await apiClient.get<typeof apiJson>();
 
+      assertEquals(getResult.code, 201);
       assertEquals(getResult.name, "created");
       // @ts-ignore if the previous test is a success then there will be no error
       assertEquals(getResult.data, apiJson);
@@ -132,6 +134,7 @@ Deno.test("Get", async (t) => {
 
       const getResult = await apiClient.get();
 
+      assertEquals(getResult.code, 400);
       assertEquals(getResult.name, "bad request");
 
       fetchStub.restore();
@@ -150,6 +153,7 @@ Deno.test("Get", async (t) => {
 
       const getResult = await apiClient.get();
 
+      assertEquals(getResult.code, 401);
       assertEquals(getResult.name, "unauthorized");
 
       fetchStub.restore();
@@ -168,6 +172,7 @@ Deno.test("Get", async (t) => {
 
       const getResult = await apiClient.get();
 
+      assertEquals(getResult.code, 404);
       assertEquals(getResult.name, "not found");
 
       fetchStub.restore();
@@ -186,11 +191,27 @@ Deno.test("Get", async (t) => {
 
       const getResult = await apiClient.get();
 
+      assertEquals(getResult.code, 500);
       assertEquals(getResult.name, "server error");
 
       fetchStub.restore();
     },
   );
+
+  await t.step("Should return client error on thrown error", async () => {
+    const fetchStub = createFetchStub(async () => {
+      throw Error();
+    });
+
+    const apiClient = new APIClient("");
+
+    const getResult = await apiClient.get();
+
+    assertEquals(getResult.code, -1);
+    assertEquals(getResult.name, "client error");
+
+    fetchStub.restore();
+  });
 });
 
 Deno.test("Post", async (t) => {
@@ -299,6 +320,7 @@ Deno.test("Post", async (t) => {
       body: {},
     });
 
+    assertEquals(getResult.code, 200);
     assertEquals(getResult.name, "ok");
     // @ts-ignore if the previous test is a success then there will be no error
     assertEquals(getResult.data, apiJson);
@@ -324,6 +346,7 @@ Deno.test("Post", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 201);
       assertEquals(getResult.name, "created");
       // @ts-ignore if the previous test is a success then there will be no error
       assertEquals(getResult.data, apiJson);
@@ -346,6 +369,7 @@ Deno.test("Post", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 400);
       assertEquals(getResult.name, "bad request");
 
       fetchStub.restore();
@@ -366,6 +390,7 @@ Deno.test("Post", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 401);
       assertEquals(getResult.name, "unauthorized");
 
       fetchStub.restore();
@@ -386,6 +411,7 @@ Deno.test("Post", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 404);
       assertEquals(getResult.name, "not found");
 
       fetchStub.restore();
@@ -406,11 +432,27 @@ Deno.test("Post", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 500);
       assertEquals(getResult.name, "server error");
 
       fetchStub.restore();
     },
   );
+
+  await t.step("Should return client error on thrown error", async () => {
+    const fetchStub = createFetchStub(async () => {
+      throw Error();
+    });
+
+    const apiClient = new APIClient("");
+
+    const getResult = await apiClient.post({ body: {} });
+
+    assertEquals(getResult.code, -1);
+    assertEquals(getResult.name, "client error");
+
+    fetchStub.restore();
+  });
 });
 
 Deno.test("Put", async (t) => {
@@ -519,6 +561,7 @@ Deno.test("Put", async (t) => {
       body: {},
     });
 
+    assertEquals(getResult.code, 200);
     assertEquals(getResult.name, "ok");
     // @ts-ignore if the previous test is a success then there will be no error
     assertEquals(getResult.data, apiJson);
@@ -544,6 +587,7 @@ Deno.test("Put", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 201);
       assertEquals(getResult.name, "created");
       // @ts-ignore if the previous test is a success then there will be no error
       assertEquals(getResult.data, apiJson);
@@ -566,6 +610,7 @@ Deno.test("Put", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 400);
       assertEquals(getResult.name, "bad request");
 
       fetchStub.restore();
@@ -586,6 +631,7 @@ Deno.test("Put", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 401);
       assertEquals(getResult.name, "unauthorized");
 
       fetchStub.restore();
@@ -606,6 +652,7 @@ Deno.test("Put", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 404);
       assertEquals(getResult.name, "not found");
 
       fetchStub.restore();
@@ -626,11 +673,27 @@ Deno.test("Put", async (t) => {
         body: {},
       });
 
+      assertEquals(getResult.code, 500);
       assertEquals(getResult.name, "server error");
 
       fetchStub.restore();
     },
   );
+
+  await t.step("Should return client error on thrown error", async () => {
+    const fetchStub = createFetchStub(async () => {
+      throw Error();
+    });
+
+    const apiClient = new APIClient("");
+
+    const getResult = await apiClient.put({ body: {} });
+
+    assertEquals(getResult.code, -1);
+    assertEquals(getResult.name, "client error");
+
+    fetchStub.restore();
+  });
 });
 
 Deno.test("Delete", async (t) => {
@@ -714,6 +777,7 @@ Deno.test("Delete", async (t) => {
 
     const getResult = await apiClient.delete<typeof apiJson>();
 
+    assertEquals(getResult.code, 200);
     assertEquals(getResult.name, "ok");
     // @ts-ignore if the previous test is a success then there will be no error
     assertEquals(getResult.data, apiJson);
@@ -737,6 +801,7 @@ Deno.test("Delete", async (t) => {
 
       const getResult = await apiClient.delete<typeof apiJson>();
 
+      assertEquals(getResult.code, 201);
       assertEquals(getResult.name, "created");
       // @ts-ignore if the previous test is a success then there will be no error
       assertEquals(getResult.data, apiJson);
@@ -757,6 +822,7 @@ Deno.test("Delete", async (t) => {
 
       const getResult = await apiClient.delete();
 
+      assertEquals(getResult.code, 400);
       assertEquals(getResult.name, "bad request");
 
       fetchStub.restore();
@@ -775,6 +841,7 @@ Deno.test("Delete", async (t) => {
 
       const getResult = await apiClient.delete();
 
+      assertEquals(getResult.code, 401);
       assertEquals(getResult.name, "unauthorized");
 
       fetchStub.restore();
@@ -793,6 +860,7 @@ Deno.test("Delete", async (t) => {
 
       const getResult = await apiClient.delete();
 
+      assertEquals(getResult.code, 404);
       assertEquals(getResult.name, "not found");
 
       fetchStub.restore();
@@ -811,9 +879,25 @@ Deno.test("Delete", async (t) => {
 
       const getResult = await apiClient.delete();
 
+      assertEquals(getResult.code, 500);
       assertEquals(getResult.name, "server error");
 
       fetchStub.restore();
     },
   );
+
+  await t.step("Should return client error on thrown error", async () => {
+    const fetchStub = createFetchStub(async () => {
+      throw Error();
+    });
+
+    const apiClient = new APIClient("");
+
+    const getResult = await apiClient.delete();
+
+    assertEquals(getResult.code, -1);
+    assertEquals(getResult.name, "client error");
+
+    fetchStub.restore();
+  });
 });
