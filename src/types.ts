@@ -77,7 +77,7 @@ interface IUnknownResponse {
    * @property
    * code is not the status code for IUnknownResponse, see the statusCode property. This is to allow for easy pattern matching on the code property.
    */
-  code: -1;
+  code: 0;
   statusCode: number;
   name: "unknown";
 }
@@ -88,6 +88,7 @@ interface IUnknownResponse {
  * It is meant to indicate that an error was thrown from the fetch api.
  */
 interface IClientError {
+  code: -1;
   name: "client error";
   err: unknown;
 }

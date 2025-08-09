@@ -79,7 +79,7 @@ class APIClient {
         responseResult = { code: 500, name: "server error" };
       } else {
         responseResult = {
-          code: -1,
+          code: 0,
           statusCode: status,
           name: "unknown",
         };
@@ -87,7 +87,7 @@ class APIClient {
 
       return responseResult;
     } catch (err) {
-      return { name: "client error", err };
+      return { code: -1, name: "client error", err };
     }
   }
 
