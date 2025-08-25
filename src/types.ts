@@ -16,6 +16,7 @@ interface IAPIOptions {
   method: "get" | "post" | "put" | "delete";
   headers?: Headers;
   body?: TJsonObj;
+  credentials?: RequestInit["credentials"];
 }
 
 type TAPIPubOptions = Omit<IAPIOptions, "method" | "body">;

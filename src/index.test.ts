@@ -76,6 +76,24 @@ Deno.test("Get", async (t) => {
     fetchStub.restore();
   });
 
+  await t.step("Should call fetch with provided credentials", async () => {
+    const fetchStub = createFetchStub(async () => new Response());
+
+    const apiClient = new APIClient("/foo");
+    const expectation = "include";
+
+    await apiClient.get({
+      credentials: expectation,
+    });
+
+    assertEquals(
+      fetchStub.calls[0].args[1]?.credentials,
+      expectation,
+    );
+
+    fetchStub.restore();
+  });
+
   await t.step("Should return an ok result on a response 200", async () => {
     const apiJson = { bar: "baz" };
     const fetchStub = createFetchStub(async () =>
@@ -281,6 +299,25 @@ Deno.test("Post", async (t) => {
 
     assertEquals(
       fetchStub.calls[0].args[1]?.headers,
+      expectation,
+    );
+
+    fetchStub.restore();
+  });
+
+  await t.step("Should call fetch with provided credentials", async () => {
+    const fetchStub = createFetchStub(async () => new Response());
+
+    const apiClient = new APIClient("/foo");
+    const expectation = "include";
+
+    await apiClient.post({
+      credentials: expectation,
+      body: {},
+    });
+
+    assertEquals(
+      fetchStub.calls[0].args[1]?.credentials,
       expectation,
     );
 
@@ -528,6 +565,25 @@ Deno.test("Put", async (t) => {
     fetchStub.restore();
   });
 
+  await t.step("Should call fetch with provided credentials", async () => {
+    const fetchStub = createFetchStub(async () => new Response());
+
+    const apiClient = new APIClient("/foo");
+    const expectation = "include";
+
+    await apiClient.put({
+      credentials: expectation,
+      body: {},
+    });
+
+    assertEquals(
+      fetchStub.calls[0].args[1]?.credentials,
+      expectation,
+    );
+
+    fetchStub.restore();
+  });
+
   await t.step("Should call fetch with the correct body", async () => {
     const fetchStub = createFetchStub(async () => new Response());
 
@@ -758,6 +814,24 @@ Deno.test("Delete", async (t) => {
 
     assertEquals(
       fetchStub.calls[0].args[1]?.headers,
+      expectation,
+    );
+
+    fetchStub.restore();
+  });
+
+  await t.step("Should call fetch with provided credentials", async () => {
+    const fetchStub = createFetchStub(async () => new Response());
+
+    const apiClient = new APIClient("/foo");
+    const expectation = "include";
+
+    await apiClient.delete({
+      credentials: expectation,
+    });
+
+    assertEquals(
+      fetchStub.calls[0].args[1]?.credentials,
       expectation,
     );
 
