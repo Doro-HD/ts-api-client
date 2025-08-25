@@ -52,6 +52,7 @@ class APIClient {
         method: options.method,
         headers,
         body: JSON.stringify(options.body),
+        credentials: options.credentials,
       });
 
       let responseResult: TAPIResult<T>;
