@@ -43,5 +43,8 @@ jobs:
           node-version: 22.11.0
           cache: pnpm
 
+      - name: Install deps
+        run: pnpm install
+
       - name: Test
         run: pnpm test:run
