@@ -14,8 +14,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.15.0
 
       - uses: actions/setup-node@v5
         with:
@@ -39,8 +37,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.15.0
 
       - uses: actions/setup-node@v5
         with:
