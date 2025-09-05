@@ -23,5 +23,8 @@ jobs:
           node-version: 22.11.0
           cache: pnpm
 
+      - name: build
+        run: pnpm build
+
       - name: Publish
         run: pnpm dlx jsr publish
