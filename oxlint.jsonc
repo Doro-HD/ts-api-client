@@ -1,4 +1,4 @@
 {
   "plugins": ["typescript", "jsdoc", "node", "promise", "vitest"],
-  "ignorePatterns": ["node_modules", ".git"],
+  "ignorePatterns": ["node_modules", ".git", "dist"]
 }

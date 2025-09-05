@@ -12,16 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          version: v2.4
+          version: 10.15.0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.11.0
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install
 
       - name: Lint
-        run: deno lint
+        run: pnpm lint
 
       - name: Format
-        run: deno fmt --check
+        run: pnpm check
 
   test:
     runs-on: ubuntu-latest
@@ -29,10 +37,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          version: v2.4
+          version: 10.15.0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.11.0
+          cache: pnpm
 
       - name: Test
-        run: deno test
+        run: pnpm test:run

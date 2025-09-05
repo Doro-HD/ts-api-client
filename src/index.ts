@@ -1,4 +1,4 @@
-import APIClient from "./apiClient.ts";
+import APIClient from "./apiClient";
 import type { TAPIResult } from "./types.ts";
 
 export default APIClient;
