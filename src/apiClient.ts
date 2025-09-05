@@ -3,8 +3,11 @@ import type {
   TAPIResult,
   TDeleteOptions,
   TGetOptions,
+  TNoBodyAPIOptions,
   TPostOptions,
   TPutOptions,
+  TDefaultAPIOptions,
+  TQuery,
 } from "./types.ts";
 
 /**
@@ -13,17 +16,17 @@ import type {
  */
 class APIClient {
   #baseUrl: string;
-  #defaultHeaders?: Headers;
+  #defaultOptions?: TNoBodyAPIOptions;
 
   /**
    * @description
    * APIClient is essentially another interface for fetch, it provides a simple structure for the most basic of operations.
    * @param baseUrl - The url to use for every method call using this APIClient instance.
-   * @param defaultHeaders - The headers to apply for every method call using this APIClient instance.
+   * @param defaultOptions - The options to apply on every api call.
    */
-  constructor(baseUrl: string, defaultHeaders?: Headers) {
+  constructor(baseUrl: string, defaultOptions?: TDefaultAPIOptions) {
     this.#baseUrl = baseUrl;
-    this.#defaultHeaders = defaultHeaders;
+    this.#defaultOptions = defaultOptions;
   }
 
   /**
@@ -37,22 +40,14 @@ class APIClient {
       path = options.path;
     }
 
-    let query = "";
-    if (options.query) {
-      const pairs = Object.entries(options.query).map(([key, value]) =>
-        `${key}=${value}`
-      );
-      query = `?${pairs.join("&")}`;
-    }
+    const query = this.#createQueryString(options.query);
 
-    const headers = this.#createHeaders(options.headers);
+    const config = this.#applyOptions(options);
 
     try {
       const res = await fetch(`${this.#baseUrl}${path}${query}`, {
-        method: options.method,
-        headers,
+        ...config,
         body: JSON.stringify(options.body),
-        credentials: options.credentials,
       });
 
       let responseResult: TAPIResult<T>;
@@ -94,21 +89,71 @@ class APIClient {
 
   /**
    * @description
-   * #createHeaders constructs the headers from the #defaultHeaders property and the provided optionHeaders parameter
-   * @param optionHeaders - The headers to apply to the request
+   * #applyConfigs merges the default config with the provided one into a single object.
+   * @param options - The options to merge with the default options
    */
-  #createHeaders(optionHeaders: IAPIOptions["headers"]): Headers | undefined {
-    const defaultHeadersArray = this.#defaultHeaders !== undefined
-      ? this.#defaultHeaders.entries()
-      : [];
-    const optionHeadersArray = optionHeaders !== undefined ? optionHeaders : [];
+  #applyOptions(options: IAPIOptions): IAPIOptions {
+    // Create headers
+    const defaultHeadersArray =
+      this.#defaultOptions?.headers !== undefined
+        ? this.#defaultOptions.headers.entries()
+        : [];
+    const optionHeadersArray =
+      options.headers !== undefined ? options.headers : [];
 
-    const headersInit = [
-      ...defaultHeadersArray,
-      ...optionHeadersArray,
-    ];
+    const headersInit = [...defaultHeadersArray, ...optionHeadersArray];
+    const headers =
+      headersInit.length > 0 ? new Headers(headersInit) : undefined;
 
-    return headersInit.length > 0 ? new Headers(headersInit) : undefined;
+    let credentials = this.#defaultOptions?.credentials;
+    if (options.credentials) {
+      credentials = options.credentials;
+    }
+
+    return {
+      method: options.method,
+      headers,
+      credentials,
+    };
+  }
+
+  /**
+   * @description
+   * #createQueryString creates a query string using the given options object and the default options
+   * @param queryRecord - The query object from the provided options
+   */
+  #createQueryString(queryRecord?: TQuery): string {
+    let optionQueryPairs: string[] = [];
+    if (queryRecord !== undefined) {
+      optionQueryPairs = this.#createQueryPairs(queryRecord);
+    }
+
+    let defaultQueryPairs: string[] = [];
+    if (this.#defaultOptions?.query !== undefined) {
+      optionQueryPairs = this.#createQueryPairs(this.#defaultOptions.query);
+    }
+
+    const queryPairs = [...optionQueryPairs, ...defaultQueryPairs];
+    if (queryPairs.length === 0) {
+      return "";
+    }
+
+    return `?${queryPairs.join("&")}`;
+  }
+
+  /**
+   * @description
+   * #createQueryPairs creates an array of string pairs, e.g. "foo=bar"
+   * @param queryRecord - The query object from the provided options
+   * @returns An array with string string pairs, e.g. "foo=bar
+   */
+  #createQueryPairs(queryRecord: TQuery): string[] {
+    const pairs = Object.entries(queryRecord).map(
+      ([key, value]) => `${key}=${value}`,
+    );
+    const queryPairs = pairs;
+
+    return queryPairs;
   }
 
   /**
@@ -128,9 +173,7 @@ class APIClient {
    * post creates a post request
    * @param options - The options that can apply to a post request
    */
-  post<T>(
-    options: TPostOptions,
-  ): Promise<TAPIResult<T>> {
+  post<T>(options: TPostOptions): Promise<TAPIResult<T>> {
     return this.#apiCall<T>({
       method: "post",
       ...options,
@@ -142,9 +185,7 @@ class APIClient {
    * put creates a put request
    * @param options - The options that can apply to a put request
    */
-  put<T>(
-    options: TPutOptions,
-  ): Promise<TAPIResult<T>> {
+  put<T>(options: TPutOptions): Promise<TAPIResult<T>> {
     return this.#apiCall<T>({
       method: "put",
       ...options,

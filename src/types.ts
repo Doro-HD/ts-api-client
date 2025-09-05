@@ -1,6 +1,5 @@
-// Util
-
 type TPath = `/${string}`;
+type TQuery = Record<string, unknown>;
 
 type TJsonObj = Record<string, any>;
 
@@ -12,7 +11,7 @@ type TJsonObj = Record<string, any>;
  */
 interface IAPIOptions {
   path?: TPath;
-  query?: Record<string, string>;
+  query?: TQuery;
   method: "get" | "post" | "put" | "delete";
   headers?: Headers;
   body?: TJsonObj;
@@ -26,6 +25,8 @@ type TNoBodyAPIOptions = TAPIPubOptions;
 interface IBodyAPIOptions extends TAPIPubOptions {
   body: TJsonObj;
 }
+
+type TDefaultAPIOptions = Omit<TNoBodyAPIOptions, "path">;
 
 type TGetOptions = TNoBodyAPIOptions;
 
@@ -75,7 +76,7 @@ interface IServerErrorResponse {
  */
 interface IUnknownResponse {
   /**
-   * @property
+   * @property {number}
    * code is not the status code for IUnknownResponse, see the statusCode property. This is to allow for easy pattern matching on the code property.
    */
   code: 0;
@@ -112,7 +113,10 @@ export type {
   TDeleteOptions,
   TGetOptions,
   TJsonObj,
+  TNoBodyAPIOptions,
   TPath,
+  TQuery,
   TPostOptions,
   TPutOptions,
+  TDefaultAPIOptions,
 };
