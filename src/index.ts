@@ -1,5 +1,25 @@
 import APIClient from "./apiClient";
-import type { TPath, TQuery, TJsonObj, TAPIResult, TDefaultAPIOptions, TGetOptions, TPostOptions, TPutOptions, TDeleteOptions, } from "./types.ts";
+import type {
+  TPath,
+  TQuery,
+  TJsonObj,
+  TAPIResult,
+  TDefaultAPIOptions,
+  TGetOptions,
+  TPostOptions,
+  TPutOptions,
+  TDeleteOptions,
+} from "./types.ts";
 
 export default APIClient;
-export type { TPath, TQuery, TJsonObj, TAPIResult, TDefaultAPIOptions, TGetOptions, TPostOptions, TPutOptions, TDeleteOptions };
+export type {
+  TPath,
+  TQuery,
+  TJsonObj,
+  TAPIResult,
+  TDefaultAPIOptions,
+  TGetOptions,
+  TPostOptions,
+  TPutOptions,
+  TDeleteOptions,
+};

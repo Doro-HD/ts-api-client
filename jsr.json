@@ -1,9 +1,9 @@
 {
-	"name": "@doro-hd/api-client",
-	"version": "3.0.0",
-	"license": "MIT",
-	"exports": {
-		"import": "./dist/index.js",
-		"types": "./dist/index.d.ts"
-	}
+  "name": "@doro-hd/api-client",
+  "version": "3.0.0",
+  "license": "MIT",
+  "exports": {
+    "import": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  }
 }
