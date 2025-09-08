@@ -6,11 +6,13 @@
   "scripts": {
     "lint": "oxlint --config oxlint.jsonc",
     "check": "prettier --check .",
+    "check-types": "tsc --noEmit",
     "format": "prettier --write .",
     "test:watch": "vitest",
     "test:run": "vitest run",
     "test": "pnpm test:watch",
-    "build": "tsc"
+    "jsr:check": "pnpm dlx jsr publish --dry-run",
+    "jsr:publish": "pnpm dlx jsr publish"
   },
   "keywords": [],
   "author": "",

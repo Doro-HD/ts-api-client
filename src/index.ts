@@ -1,3 +1,4 @@
+/* @ts-self-types="./path/to/types.d.ts" */
 import APIClient from "./apiClient";
 import type {
   TPath,
