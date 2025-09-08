@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  style:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +23,17 @@ jobs:
       - name: Install deps
         run: pnpm install
 
+      - name: Check types
+        run: pnpm check-types
+
       - name: Lint
         run: pnpm lint
 
       - name: Format
         run: pnpm check
+
+      - name: Check publish
+        run: pnpm jsr:check
 
   test:
     runs-on: ubuntu-latest
